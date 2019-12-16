@@ -69,8 +69,8 @@ export default class App extends Component {
       <View style={styles.splashScreen}>
         {loading ? (
           <>
-            <ActivityIndicator size={50} />
-            <Text>Loading Starships</Text>
+            <ActivityIndicator size={50} color="#FFF" />
+            <Text style={styles.splashText}>Loading Starships</Text>
           </>
         ) : (
           <Text>No Starships found</Text>
@@ -121,6 +121,12 @@ const styles = StyleSheet.create({
   splashScreen: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "#3498db"
+  },
+  splashText: {
+    fontSize: 20,
+    color: "#FFF",
+    fontWeight: "bold"
   }
 });

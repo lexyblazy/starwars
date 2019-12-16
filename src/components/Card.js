@@ -26,14 +26,7 @@ const Card = ({ starship, onPress }) => {
 
       <Button
         icon={<Icon name="info" color="#ffffff" />}
-        buttonStyle={{
-          borderRadius: 0,
-          marginLeft: 0,
-          marginRight: 0,
-          marginBottom: 0,
-          width: 200,
-          alignSelf: "center"
-        }}
+        buttonStyle={styles.button}
         title="  More Info"
         onPress={() => onPress(starship)}
       />
@@ -48,6 +41,14 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14
+  },
+  button: {
+    borderRadius: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 0,
+    width: 200,
+    alignSelf: "center"
   }
 });
 
