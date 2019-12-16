@@ -2,10 +2,6 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Card as RNECard, Button, Icon } from "react-native-elements";
 
-/** */
-
-// "
-
 const Card = ({ starship, onPress }) => {
   return (
     <RNECard
@@ -13,12 +9,18 @@ const Card = ({ starship, onPress }) => {
       image={{ uri: "https://i.imgur.com/GTm8xom.png" }}
     >
       <View style={styles.info}>
-      <Text style={styles.infoText}>Model : {starship.model}</Text>
+        <Text style={styles.infoText}>Model : {starship.model}</Text>
         <Text style={styles.infoText}>
-          Cost: {starship.cost_in_credits} Credits
+          Cost:{" "}
+          {starship.cost_in_credits !== "unknown"
+            ? `${starship.cost_in_credits} Credits`
+            : "unknown"}
         </Text>
         <Text style={styles.infoText}>
-          Cargo Capacity: {starship.cargo_capacity} Tonnes{" "}
+          Cargo Capacity:{" "}
+          {starship.cargo_capacity !== "unknown"
+            ? `${starship.cargo_capacity} Tonnes`
+            : "unknown"}
         </Text>
       </View>
 

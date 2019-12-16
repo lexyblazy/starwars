@@ -1,7 +1,16 @@
 import React, { Component } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator
+} from "react-native";
+import { Overlay, Button } from "react-native-elements";
+import { v1 } from "uuid";
 import axios from "axios";
 import Card from "./components/Card";
+import StarshipDetail from "./components/StarshipDetail";
 
 export default class App extends Component {
   state = { starships: [], loading: true, selectedStarship: null };
@@ -23,15 +32,58 @@ export default class App extends Component {
 
   onStarshipSelected = starship => {
     this.setState({ selectedStarship: starship }, () => {
-      console.log(this.state.selectedStarship);
+      this.renderStarshipDetail();
     });
+  };
+
+  closeOverlay = () => this.setState({ selectedStarship: null });
+
+  renderStarshipDetail = () => {
+    const { selectedStarship } = this.state;
+
+    return (
+      <Overlay
+        isVisible={!!selectedStarship}
+        onBackdropPress={this.closeOverlay}
+        containerStyle={styles.overlay}
+        children={
+          <View>
+            <View style={styles.detailsContainer} key={v1()}>
+              <StarshipDetail starship={selectedStarship} />
+            </View>
+            <Button
+              title="close"
+              onPress={this.closeOverlay}
+              style={styles.closeButton}
+              key={v1()}
+            />
+          </View>
+        }
+      />
+    );
+  };
+
+  renderSplashScreen = () => {
+    const { loading } = this.state;
+    return (
+      <View style={styles.splashScreen}>
+        {loading ? (
+          <>
+            <ActivityIndicator size={50} />
+            <Text>Loading Starships</Text>
+          </>
+        ) : (
+          <Text>No Starships found</Text>
+        )}
+      </View>
+    );
   };
 
   renderStarShips = () => {
     const { starships, loading } = this.state;
 
     if (starships.length < 1) {
-      return <Text>{loading ? "Loading" : "No starships found"}</Text>;
+      return this.renderSplashScreen();
     }
     return (
       <FlatList
@@ -39,13 +91,18 @@ export default class App extends Component {
         renderItem={({ item }) => (
           <Card starship={item} onPress={this.onStarshipSelected} />
         )}
-        keyExtractor={item => item.url}
+        keyExtractor={item => `${item.url}-${v1()}`}
       />
     );
   };
 
   render() {
-    return <View style={styles.container}>{this.renderStarShips()}</View>;
+    return (
+      <View style={styles.container}>
+        {this.renderStarshipDetail()}
+        {this.renderStarShips()}
+      </View>
+    );
   }
 }
 
@@ -53,5 +110,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF"
+  },
+  overlay: {
+    flexDirection: "column"
+  },
+  closeButton: { width: 100 },
+  detailsContainer: {
+    marginBottom: 50
+  },
+  splashScreen: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
